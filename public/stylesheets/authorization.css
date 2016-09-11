@@ -1,0 +1,11 @@
+#auth .mdl-color--grey-100{
+  background-color:#ECEFF1 !important;
+}
+#auth .mdl-layout {
+  align-items: center;
+  justify-content: center;
+}
+#auth .mdl-layout__content {
+  padding: 24px;
+  flex: none;
+}

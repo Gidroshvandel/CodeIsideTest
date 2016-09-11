@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+#{extends 'include_navigation.html' /}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<main class="mdl-layout__content mdl-color--grey-100">
+    <div class="page-content">
+        <div class="mdl-grid">
+            <div class="mdl-cell--1-col">
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                    <thead>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric">Книги
+                            #{secure.check 'admin'}
+                            <a href="@{Books.list()}">Edit</a>
+                            #{/secure.check}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #{list items:bookList, as:'books'}
+                    <tr>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <!--<li>Email: ${books.name}. Full Name: ${books.author}</li>-->
+                            <form action="@{Application.addBook()}" accept-charset="UTF-8" method="POST">
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <div class="mdl-textfield__input">Книга: <center>${books.name}</center></div>
+                                    <div class="mdl-textfield__input">Автор: <center> ${books.author}</center></div>
+                                    <div><p>Укажите день получения книги:</div>
+                                    <input type="date" name="calendarPut">
+                                    <div><p>Укажите день возврата книги:</div>
+                                    <input type="date" name="calendarPush">
+                                    <input type="hidden" name="name"
+                                           value="${books.name}">
+                                    <input type="hidden" name="author"
+                                           value="${books.author}">
+                                </div>
+                                <input class="mdl-button mdl-js-button mdl-button--colored" type="submit"
+                                       value="add">
+                            </form>
+                            #{secure.check 'admin'}
+                            <form action="@{Admin.whoUseBook()}" accept-charset="UTF-8" method="POST">
+                                <input type="hidden" name="name"
+                                       value="${books.name}">
+                                <input type="hidden" name="author"
+                                       value="${books.author}">
+                                <input class="mdl-button mdl-js-button mdl-button--colored" type="submit"
+                                       value="show">
+                            </form>
+                            #{/secure.check}
+
+                        </td>
+                    </tr>
+                    #{/list}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

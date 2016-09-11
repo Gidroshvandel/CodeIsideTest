@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+#{extends 'include_navigation.html' /}
+<html>
+<head>
+
+</head>
+<body>
+<main class="mdl-layout__content mdl-color--grey-100">
+    <div class="page-content">
+        <div class="mdl-grid">
+            <div class="mdl-cell--1-col">
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                    <thead>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric">Мои книги
+                            #{secure.check 'admin'}
+                            <a href="@{Librarys.list()}">Edit</a>
+                            #{/secure.check}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #{list items:list, as:'library'}
+                    <tr>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <form action="@{Application.deleteBook()}" accept-charset="UTF-8" method="POST">
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <div class="mdl-textfield__input">Книга: <center>${library.book.name}</center></div>
+                                    <div class="mdl-textfield__input">Автор: <center>${library.book.author}</center></div>
+                                    <div class="mdl-textfield__input">Получена <center>${library.startReadDate.format('dd-MM-yyyy')}</center></div>
+                                    <div class="mdl-textfield__input">Возврат <center>${library.endReadDate.format('dd-MM-yyyy')}</center></div>
+                                    <input type="hidden" name="id"
+                                           value="${library.id}">
+                                </div>
+                                <input class="mdl-button mdl-js-button mdl-button--colored" type="submit"
+                                       value="Вернуть">
+                            </form>
+                        </td>
+                    </tr>
+                    #{/list}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

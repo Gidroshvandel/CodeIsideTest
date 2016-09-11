@@ -1,0 +1,9 @@
+html, body{
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+.page-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}

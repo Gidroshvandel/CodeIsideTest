@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+#{extends 'include_navigation.html' /}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<main class="mdl-layout__content mdl-color--grey-100">
+    <div class="page-content">
+        <div class="mdl-grid">
+            <div class="mdl-cell--1-col">
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                    <thead>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric">Читатели
+                            <a href="@{Users.list()}">Edit</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #{list items:userList, as:'users'}
+                    <tr>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <form action="@{Admin.userBooksList()}" accept-charset="UTF-8" method="POST">
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <div class="mdl-textfield__input"><center>Email: ${users.email}.</center></div>
+                                    <div class="mdl-textfield__input"><center>Name: ${users.fullname}.</center></div>
+                                    <input class="mdl-textfield__input" type="hidden" name="email"
+                                           value="${users.email}">
+                                </div>
+                                <input class="mdl-button mdl-js-button mdl-button--colored" type="submit"
+                                       value="Show">
+                            </form>
+                        </td>
+                    </tr>
+                    #{/list}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
