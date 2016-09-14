@@ -15,34 +15,10 @@ import java.util.List;
 @With(Secure.class)
 public class Application extends Controller {
 
-
-
     @Before
     static void setConnectedUser() {
-        if(Security.isConnected()) {
-            if(User.findByEmail("admin@mail.ru")==null){
-                try {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                    new User("admin@mail.ru","root","admin",true).save();
-                    User user = new User("user@mail.ru","123456","Иванов Иван Иванович",false).save();
-                    User user2 = new User("user2@mail.ru","123456","Простакова Людмила Сергеевна",false).save();
-                    Book book = new Book("Война и мир","Лев Николаевич Толстой").save();
-                    Book book2 = new Book("Степной Волк","Герман Гёссе").save();
-                    Book book3 = new Book("Фауст","Иоганн Вольфганг фон Гёте").save();
-                    new Book("Процесс","Франц Кафка").save();
-                    new Book("Цифровой","Сергей и Мария Дяченко").save();
-                    new Library(book, user, formatter.parse("2016-09-9"),formatter.parse("2016-09-11"),false).save();
-                    new Library(book2, user, formatter.parse("2016-09-1"),formatter.parse("2016-09-9"),false).save();
-                    new Library(book3, user, formatter.parse("2016-09-11"),formatter.parse("2016-09-16"),true).save();
-                    new Library(book, user2, formatter.parse("2016-09-2"),formatter.parse("2016-09-11"),false).save();
-                    new Library(book2, user2, formatter.parse("2016-09-5"),formatter.parse("2016-09-15"),true).save();
-                    new Library(book3, user2, formatter.parse("2016-09-11"),formatter.parse("2016-09-22"),true).save();
-                }
-                catch (Exception e){
-                    System.out.println(e);
-                }
 
-            }
+        if(Security.isConnected()) {
             User user = User.find("byEmail", Security.connected()).first();
             renderArgs.put("user", user.getFullname());
         }
@@ -54,11 +30,6 @@ public class Application extends Controller {
             user = User.find("byEmail", Security.connected()).first();
         }
         List<Library> list = Library.findByUserOnUse(user, true);
-//        for (Library lib: list
-//             ) {
-//            if(lib.getOnUse() == true){
-//            }
-//        }
         render(list);
     }
 
@@ -95,29 +66,35 @@ public class Application extends Controller {
 
             if (datePut.before(datePush)) {
 
-                List<Library> list = Library.findByBook(book);
-                if(list != null) {
+                if(datePut.before(new java.util.Date ()) || datePush.before(new java.util.Date ())) {
 
-                    Boolean bool = true;
+                    List<Library> list = Library.findByBook(book);
+                    if (list != null) {
 
-                    for (Library library : list
-                            ) {
-                        if (!((datePut.before(library.getStartReadDate()) || datePut.after(library.getEndReadDate())) && (datePush.before(library.getStartReadDate()) || datePush.after(library.getEndReadDate())))) {
-                            bool = false;
+                        Boolean bool = true;
+
+                        for (Library library : list
+                                ) {
+                            if (!((datePut.before(library.getStartReadDate()) || datePut.after(library.getEndReadDate())) && (datePush.before(library.getStartReadDate()) || datePush.after(library.getEndReadDate())))) {
+                                bool = false;
+                            }
                         }
-                    }
-                    if (bool) {
+                        if (bool) {
+                            new Library(book, user, datePut, datePush, true).save();
+                            String e = "Добавление прошло успешно";
+                            render(e);
+                        } else {
+                            String e = "Error. В выбранный период книга занята други пользователем";
+                            render(e);
+                        }
+                    } else {
                         new Library(book, user, datePut, datePush, true).save();
                         String e = "Добавление прошло успешно";
                         render(e);
-                    } else {
-                        String e = "Error. В выбранный период книга занята други пользователем";
-                        render(e);
                     }
                 }
-                else{
-                    new Library(book, user, datePut, datePush, true).save();
-                    String e = "Добавление прошло успешно";
+                else {
+                    String e = "Error. Дата получения или возврата раньше текущей даты";
                     render(e);
                 }
             }
