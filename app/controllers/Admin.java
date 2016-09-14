@@ -14,8 +14,13 @@ public class Admin extends Controller {
     @Before
     static void setConnectedUser() {
         if(Security.isConnected()) {
+            try {
             User user = User.find("byEmail", Security.connected()).first();
             renderArgs.put("user", user.getFullname());
+        }
+        catch (Exception e){
+            Security.redirect("/logout");
+        }
         }
     }
 
