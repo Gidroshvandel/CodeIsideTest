@@ -1,10 +1,17 @@
 import org.junit.*;
+import play.mvc.Before;
 import play.test.*;
 import play.mvc.*;
 import play.mvc.Http.*;
 import models.*;
 
 public class ApplicationTest extends FunctionalTest {
+
+    @Before
+    public void setUp() {
+        Fixtures.deleteAll();
+        Fixtures.loadModels("data.yml");
+    }
 
     @Test
     public void testThatIndexPageWorks() {

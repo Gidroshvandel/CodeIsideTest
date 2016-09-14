@@ -72,7 +72,7 @@ public class Application extends Controller {
 
             if (datePut.before(datePush)) {
 
-                if(datePut.before(new java.util.Date ()) || datePush.before(new java.util.Date ())) {
+                if(datePut.after(new java.util.Date ()) || datePush.after(new java.util.Date ())) {
 
                     List<Library> list = Library.findByBook(book);
                     if (list != null) {
