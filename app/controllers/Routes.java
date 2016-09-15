@@ -5,7 +5,7 @@ import play.mvc.Controller;
 
 import java.util.List;
 
-public class Routs extends Controller {
+public class Routes extends Controller {
     public static void getBooks() {
         List bookList = Book.findAll();
         renderJSON(bookList);
