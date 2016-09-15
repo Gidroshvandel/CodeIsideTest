@@ -10,13 +10,23 @@ import java.util.List;
 public class Routes extends Controller {
     public static void getBooks(String bookName, String author) {
         Book book = Book.findByNameAndAutor(bookName, author);
-        List<Library> list = Library.findByBook(book);
-        renderJSON(list);
+        if(book != null) {
+            List<Library> list = Library.findByBook(book);
+            renderJSON(list);
+        }
+        else {
+            renderJSON("null");
+        }
     }
 
     public static void getUsers(String userEmail) {
         User user = User.find("byEmail", userEmail).first();
-        List<Library> list = Library.findByUserOnUse(user, true);
-        renderJSON(list);
+        if(user != null) {
+            List<Library> list = Library.findByUserOnUse(user, true);
+            renderJSON(list);
+        }
+        else {
+            renderJSON("null");
+        }
     }
 }
