@@ -10,9 +10,13 @@ import play.mvc.Controller;
 import play.mvc.With;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @With(Secure.class)
 public class Application extends Controller {
+
+    private static Logger log = Logger.getLogger(Application.class.getName());
 
     @Before
     static void setConnectedUser() {
@@ -23,6 +27,7 @@ public class Application extends Controller {
                 renderArgs.put("user", user.getFullname());
             }
             catch (Exception e){
+                log.log(Level.SEVERE, "Exception: ", e);
                 Security.redirect("/logout");
             }
 
@@ -47,6 +52,7 @@ public class Application extends Controller {
             String e = "Возврат прошёл успешно";
             render(e);
         }catch (Exception e){
+            log.log(Level.SEVERE, "Exception: ", e);
             render(e);
         }
     }
@@ -54,7 +60,8 @@ public class Application extends Controller {
     public static void addBook(String name, String author, String calendarPut, String calendarPush) {
 
         Book book = Book.findByNameAndAutor(name, author);
-        render(App.validateAddBook(book, getCurrentUser(), calendarPut, calendarPush));
+        String e = App.validateAddBook(book, getCurrentUser(), calendarPut, calendarPush);
+        render(e);
 
     }
 

@@ -8,19 +8,25 @@ import play.mvc.Controller;
 import play.mvc.With;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @With(Secure.class)
 public class Admin extends Controller {
+
+    private static Logger log = Logger.getLogger(Admin.class.getName());
+
     @Before
     static void setConnectedUser() {
         if(Security.isConnected()) {
             try {
-            User user = User.find("byEmail", Security.connected()).first();
-            renderArgs.put("user", user.getFullname());
-        }
-        catch (Exception e){
-            Security.redirect("/logout");
-        }
+                User user = User.find("byEmail", Security.connected()).first();
+                renderArgs.put("user", user.getFullname());
+            }
+            catch (Exception e){
+                log.log(Level.SEVERE, "Exception: ", e);
+                Security.redirect("/logout");
+            }
         }
     }
 

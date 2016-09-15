@@ -6,12 +6,17 @@ import models.Library;
 import models.User;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class App {
+
+    private static Logger log = Logger.getLogger(App.class.getName());
 
     private static Boolean isUniqueRequestToPutBook(List<Library> list, Date datePut, Date datePush){
         Boolean uniqueRequestToPutBook = true;
@@ -26,40 +31,36 @@ public class App {
 
     public static String validateAddBook(Book book, User user, String calendarPut, String calendarPush) {
         try {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                Date datePut = formatter.parse(calendarPut);
-                Date datePush = formatter.parse(calendarPush);
-                String e;
-                if (datePut.before(datePush)) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date datePut = formatter.parse(calendarPut);
+            Date datePush = formatter.parse(calendarPush);
 
-                    if (datePut.after(new java.util.Date()) || datePush.after(new java.util.Date())) {
+            if (datePut.before(datePush)) {
 
-                        List<Library> list = Library.findByBook(book);
-                        if (list != null) {
-                            if (isUniqueRequestToPutBook(list, datePut, datePush)) {
-                                new Library(book, user, datePut, datePush, true).save();
-                                e = "Добавление прошло успешно";
-                                return e;
-                            } else {
-                                e = "Error. В выбранный период книга занята други пользователем";
-                                return e;
-                            }
-                        } else {
+                if (datePut.after(new java.util.Date()) || datePush.after(new java.util.Date())) {
+
+                    List<Library> list = Library.findByBook(book);
+                    if (list != null) {
+                        if (isUniqueRequestToPutBook(list, datePut, datePush)) {
                             new Library(book, user, datePut, datePush, true).save();
-                            e = "Добавление прошло успешно";
-                            return e;
+                            return "Добавление прошло успешно";
+                        } else {
+                            return "Error. В выбранный период книга занята други пользователем";
                         }
                     } else {
-                        e = "Error. Дата получения или возврата раньше текущей даты";
-                        return e;
+                        new Library(book, user, datePut, datePush, true).save();
+                        return "Добавление прошло успешно";
                     }
                 } else {
-                    e = "Error. Дата возврата раньше даты получения";
-                    return e;
+                    return "Error. Дата получения или возврата раньше текущей даты";
                 }
-            }catch (Exception e){
-                return e.toString();
+            } else {
+                return "Error. Дата возврата раньше даты получения";
             }
+        }catch (ParseException e){
+            log.log(Level.SEVERE, "Exception: ", e);
+            return "Неверный формат даты";
+        }
     }
 
 }
