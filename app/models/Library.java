@@ -11,11 +11,11 @@ import play.db.jpa.*;
 public class Library extends Model {
 
     @Required
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name = "bookId", nullable = false)
     private Book book;
     @Required
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name = "userId", nullable = false)
     private User user;
     @Required
