@@ -7,12 +7,6 @@ import models.*;
 
 public class ApplicationTest extends FunctionalTest {
 
-    @Before
-    public void setUp() {
-        Fixtures.deleteAll();
-        Fixtures.loadModels("data.yml");
-    }
-
     @Test
     public void testThatIndexPageWorks() {
         Response response = GET("/");

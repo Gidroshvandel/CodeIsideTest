@@ -1,0 +1,15 @@
+User(admin):
+   fullname: admin
+   email: admin@mail.ru
+   password: root
+   isAdmin: true
+User(Иванов Иван Иванович):
+   fullname: Иванов Иван Иванович
+   email: mail@mail.ru
+   password: 123456
+   isAdmin: false
+User(Смолякова Лариса Григорьевна):
+  fullname: Смолякова Лариса Григорьевна
+  email: mail2@mail.ru
+  password: 123456
+  isAdmin: false
