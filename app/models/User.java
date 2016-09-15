@@ -3,10 +3,13 @@ package models;
 import java.util.*;
 import javax.persistence.*;
 
+import groovy.transform.PackageScope;
 import play.data.validation.Email;
+import play.data.validation.Password;
 import play.data.validation.Required;
 import play.data.validation.Unique;
 import play.db.jpa.*;
+import play.libs.Crypto;
 
 @Entity
 public class User extends Model {
@@ -15,8 +18,9 @@ public class User extends Model {
     @Unique
     @Required
     private String email;
+    @Password
     @Required
-    private String password;
+    private String  password;
     @Required
     private String fullname;
     public boolean isAdmin;
@@ -26,13 +30,13 @@ public class User extends Model {
 
     public User(String email, String password, String fullname) {
         this.email = email;
-        this.password = password;
+        this.password = Crypto.passwordHash(email + password);
         this.fullname = fullname;
     }
 
     public User(String email, String password, String fullname, boolean isAdmin) {
         this.email = email;
-        this.password = password;
+        this.password = Crypto.passwordHash(email + password);
         this.fullname = fullname;
         this.isAdmin = isAdmin;
     }
@@ -66,8 +70,8 @@ public class User extends Model {
         return user;
     }
 
-    public static Object connect(String username, String password) {
-        User user = User.find("SELECT user FROM models.User user WHERE user.email=:username and user.password=:password").bind("username", username).bind("password", password).first();
+    public static Object connect(String email, String password) {
+        User user = User.find("SELECT user FROM models.User user WHERE user.email=:email and user.password=:password").bind("email", email).bind("password", Crypto.passwordHash(email + password)).first();
         return user;
 
     }

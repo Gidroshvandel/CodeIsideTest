@@ -4,6 +4,7 @@ package controllers;
 import models.Book;
 import models.Library;
 import models.User;
+import play.libs.Crypto;
 
 import java.text.SimpleDateFormat;
 
