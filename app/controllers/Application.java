@@ -40,7 +40,7 @@ public class Application extends Controller {
     }
 
     public static void books() {
-        List bookList = Book.findAll();
+        List<Book> bookList = Book.findAll();
         render(bookList);
     }
 

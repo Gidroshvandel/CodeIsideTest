@@ -32,14 +32,14 @@ public class Admin extends Controller {
 
     public static void userBooksList(String email) {
         User user = User.find("byEmail", email).first();
-        List list = Library.findByUserOnUse(user, true);
+        List<Library> list = Library.findByUserOnUse(user, true);
         String username = user.getFullname();
         render(list, username);
     }
 
     public static void whoUseBook(String name, String author) {
         Book book = Book.findByNameAndAutor(name, author);
-        List list = Library.findByBook(book);
+        List<Library> list = Library.findByBook(book);
         String bookname = name;
 
         render(list, bookname);
